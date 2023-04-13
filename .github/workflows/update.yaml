@@ -42,16 +42,16 @@ jobs:
 
           echo "Updating ffmpeg to $NEW_VERSION :rocket:" >> $GITHUB_STEP_SUMMARY
 
-      # - name: Commit module updates
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   if: ${{ steps.latest.outputs.new-version }}
-      #   with:
-      #     commit_message: "Update ffmpeg version to ${{ steps.latest.outputs.new-version }}"
-      #     tagging_message: "v${{ steps.latest.outputs.new-version }}"
+      - name: Commit module updates
+        uses: stefanzweifel/git-auto-commit-action@v4
+        if: ${{ steps.latest.outputs.new-version }}
+        with:
+          commit_message: "Update ffmpeg version to ${{ steps.latest.outputs.new-version }}"
+          tagging_message: "v${{ steps.latest.outputs.new-version }}"
 
       - name: Setup NuGet
         if: ${{ steps.latest.outputs.new-version }}
-        uses: NuGet/setup-nuget@v1.0.5
+        uses: NuGet/setup-nuget@v1
         
       - name: build and publish
         if: ${{ steps.latest.outputs.new-version }}
