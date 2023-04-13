@@ -5,12 +5,6 @@ NEW_VERSION=$2
 
 echo "Changing $OLD_VERSION to $NEW_VERSION"
 
-if [ "$OLD_VERSION" == "$NEW_VERSION" ] && [ "$1" != "--force" ]
-then
-  echo "Already up to date."
-  exit 0
-fi
-
 OLD_NUGET_VERSION=`sed -n 's|\s*<version>\(.*\)</version>|\1|p' FFmpeg.Stable.nuspec`
 OLD_NUGET_VERSION_MAJOR=`expr "${OLD_NUGET_VERSION}" : '^\([0-9]*\)[.]'`
 OLD_NUGET_VERSION_MINOR=`expr "${OLD_NUGET_VERSION}" : '^[0-9]*[.]\([0-9]*\)'`
