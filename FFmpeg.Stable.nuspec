@@ -17,12 +17,11 @@
   <files>
     <file src="nuget-readme.txt" target="readme.txt" />
     <file src="FFmpeg.Stable.targets" target="build\native" />
-    <file src="ffmpeg-5.1.2-win32-dev\include\**" target="build\native\include" />
-    <file src="ffmpeg-5.1.2-win32-dev\LICENSE.txt" target="build\native\share\doc\ffmpeg-windows-build-license.txt" />
-    <file src="ffmpeg-5.1.2-win32-dev\README.txt" target="build\native\share\doc\ffmpeg-windows-build-readme.txt" />
-    <file src="ffmpeg-5.1.2-win32-dev\lib\*.lib" target="build\native\lib\Win32" />
-    <file src="ffmpeg-5.1.2-win64-dev\lib\*.lib" target="build\native\lib\x64" />
-    <file src="ffmpeg-5.1.2-win32-shared\bin\*.dll" target="build\native\bin\Win32" />
-    <file src="ffmpeg-5.1.2-win64-shared\bin\*.dll" target="build\native\bin\x64" />
+    <file src="ffmpeg-5.1.2-full_build-shared\include\**" target="build\native\include" />
+    <file src="ffmpeg-5.1.2-full_build-shared\LICENSE" target="build\native\share\doc\ffmpeg-windows-build-license.txt" />
+    <file src="ffmpeg-5.1.2-full_build-shared\README.txt" target="build\native\share\doc\ffmpeg-windows-build-readme.txt" />
+    <file src="ffmpeg-5.1.2-full_build-shared\lib\*.lib" target="build\native\lib\x64" />
+    <file src="ffmpeg-5.1.2-full_build-shared\bin\*.dll" target="build\native\bin\x64" />
+    <file src="ffmpeg-5.1.2-full_build-shared\bin\*.exe" target="build\native\bin\x64" />
   </files>
 </package>
