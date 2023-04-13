@@ -1,0 +1,72 @@
+name: Update
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  # Run daily
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  sync-beta:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Find latest version
+        id: latest
+        shell: bash
+        run: |
+          OLD_VERSION=`sed -n 's|[$]ffmpeg = "\(.*\)"|\1|p' install.ps1`
+          NEW_VERSION=`curl https://api.github.com/repos/GyanD/codexffmpeg/releases/latest -s | jq .tag_name -r`
+
+          if [ -z "$OLD_VERSION" ]
+          then
+            echo "Failed to find OLD_VERSION"
+            exit 1
+          fi
+          if [ -z "$NEW_VERSION" ]
+          then
+            echo "Failed to find NEW_VERSION"
+            exit 1
+          fi
+
+          if [ "$OLD_VERSION" == "$NEW_VERSION" ]
+          then
+            echo "Already up to date."
+            exit 0
+          fi
+          
+          ./set-version.sh $OLD_VERSION $NEW_VERSION
+
+          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+          echo "Updating ffmpeg to $NEW_VERSION :rocket:" >> $GITHUB_STEP_SUMMARY
+
+      # - name: Commit module updates
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   if: ${{ steps.latest.outputs.new-version }}
+      #   with:
+      #     commit_message: "Update ffmpeg version to ${{ steps.latest.outputs.new-version }}"
+      #     tagging_message: "v${{ steps.latest.outputs.new-version }}"
+
+      - name: Setup NuGet
+        if: ${{ steps.latest.outputs.new-version }}
+        uses: NuGet/setup-nuget@v1.0.5
+        
+      - name: build and publish
+        if: ${{ steps.latest.outputs.new-version }}
+        run: |
+          ./install.ps1
+          ./build.ps1
+
+          nuget pack FFmpeg.Stable.nuspec
+
+      - name: Upload artifact
+        if: ${{ steps.latest.outputs.new-version }}
+        uses: actions/upload-artifact@v3
+        with:
+          path: "*.nupkg"
+
+      - name: Publish
+        if: ${{ steps.latest.outputs.new-version }}
+        run: nuget push *.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
