@@ -8,7 +8,7 @@ on:
 
 jobs:
   run-build:
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v3
 
@@ -57,7 +57,7 @@ jobs:
         if: ${{ steps.latest.outputs.new-version }}
         run: |
           ./install.ps1
-          ./build.ps1
+          # ./build.ps1
 
           nuget pack FFmpeg.Stable.nuspec
 
