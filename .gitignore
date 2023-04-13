@@ -4,6 +4,7 @@
 *.zip
 ffmpeg-*-win*-dev/
 ffmpeg-*-win*-shared/
+ffmpeg-*-shared
 .vs/
 packages/
 localfeed/

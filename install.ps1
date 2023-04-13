@@ -1,27 +1,20 @@
-$ffmpeg = "ffmpeg-4.2.2"
-$dev32 = "$ffmpeg-win32-dev"
-$dev64 = "$ffmpeg-win64-dev"
-$shared32 = "$ffmpeg-win32-shared"
-$shared64 = "$ffmpeg-win64-shared"
+$ffmpeg = "4.2.2"
+$full_build = "ffmpeg-$ffmpeg-full_build-shared"
 $wc = New-Object System.Net.WebClient
 
-if (!(Test-Path "$dev32.zip")) { $wc.DownloadFile("http://ffmpeg.zeranoe.com/builds/win32/dev/$dev32.zip", "$env:temp/$dev32.zip") }
-if (!(Test-Path "$dev64.zip")) { $wc.DownloadFile("http://ffmpeg.zeranoe.com/builds/win64/dev/$dev64.zip", "$env:temp/$dev64.zip") }
-if (!(Test-Path "$shared32.zip")) { $wc.DownloadFile("http://ffmpeg.zeranoe.com/builds/win32/shared/$shared32.zip", "$env:temp/$shared32.zip") }
-if (!(Test-Path "$shared64.zip")) { $wc.DownloadFile("http://ffmpeg.zeranoe.com/builds/win64/shared/$shared64.zip", "$env:temp/$shared64.zip") }
+if (!(Test-Path "$dev32.zip")) { $wc.DownloadFile("https://github.com/GyanD/codexffmpeg/releases/download/$ffmpeg/$full_build.zip", "$env:temp/$full_build.zip") }
 
-if (!(Test-Path $dev32)) { Expand-Archive "$env:temp/$dev32.zip" -DestinationPath . }
-if (!(Test-Path $dev64)) { Expand-Archive "$env:temp/$dev64.zip" -DestinationPath . }
-if (!(Test-Path $shared32)) { Expand-Archive "$env:temp/$shared32.zip" -DestinationPath . }
-if (!(Test-Path $shared64)) { Expand-Archive "$env:temp/$shared64.zip" -DestinationPath . }
+if (!(Test-Path $full_build)) { Expand-Archive "$env:temp/$full_build.zip" -DestinationPath . }
 
-Copy-Item "$dev32\examples\*.c" examples
+# Remove-Item -Recurse examples
+# New-Item -Name examples -ItemType "directory"
+# Copy-Item "$full_build\examples\*.c" examples
 
-# unistd.h -> io.h (for MSVC)
-$cfiles = Get-ChildItem -Path examples\ -Filter *.c
-foreach ($file in $cfiles)
-{
-  (Get-Content $file.PSPath) |
-  Foreach-Object { $_ -replace "unistd.h", "io.h" } |
-    Set-Content $file.PSPath
-}
+# # unistd.h -> io.h (for MSVC)
+# $cfiles = Get-ChildItem -Path examples\ -Filter *.c
+# foreach ($file in $cfiles)
+# {
+#   (Get-Content $file.PSPath) |
+#   Foreach-Object { $_ -replace "unistd.h", "io.h" } |
+#     Set-Content $file.PSPath
+# }
