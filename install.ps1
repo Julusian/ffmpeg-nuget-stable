@@ -1,4 +1,4 @@
-$ffmpeg = "6.0"
+$ffmpeg = "null"
 $full_build = "ffmpeg-$ffmpeg-full_build-shared"
 $wc = New-Object System.Net.WebClient
 
